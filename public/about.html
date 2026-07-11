@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telaga Warna Resort - Tentang Kami</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Telaga Warna Resort</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Beranda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="about.html">Tentang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="rooms.html">Kamar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="location.html">Lokasi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Kontak</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="upload-video.html">Upload Video</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <section>
+            <h1 class="text-center mb-4">Tentang Telaga Warna Resort</h1>
+            <p class="text-center">Selamat datang di Telaga Warna Resort, destinasi penginapan nyaman untuk Anda dan keluarga.</p>
+            
+            <hr class="my-5">
+
+            <h2 class="text-center mb-4">Video Promosi</h2>
+            
+            <!-- Wadah ini awalnya kosong, akan diisi otomatis oleh JavaScript -->
+            <div id="tempatVideo" class="text-center mb-4">
+                <p class="text-muted">Sedang memuat video...</p>
+            </div> 
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2026 Telaga Warna Resort. Semua hak dilindungi.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Skrip ini akan langsung berjalan saat halaman "Tentang" dibuka
+        document.addEventListener("DOMContentLoaded", async () => {
+            const tempatVideo = document.getElementById('tempatVideo');
+            
+            try {
+                // Meminta daftar video dari server (pastikan server.js sudah diupdate)
+                const response = await fetch('/videos');
+                const files = await response.json();
+
+                if (files.length === 0) {
+                    tempatVideo.innerHTML = '<p>Belum ada video promosi yang diupload.</p>';
+                    return;
+                }
+
+                // Kosongkan tulisan "Sedang memuat video..."
+                tempatVideo.innerHTML = '';
+
+                // Pasang setiap video ke halaman secara otomatis
+                files.forEach(file => {
+                    const videoHTML = `
+                        <div class="mb-5">
+                            <video width="100%" height="auto" controls style="max-width: 800px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                                <source src="/uploads/${file}" type="video/mp4">
+                                Browser kamu tidak mendukung tag video.
+                            </video>
+                        </div>
+                    `;
+                    tempatVideo.innerHTML += videoHTML;
+                });
+            } catch (error) {
+                tempatVideo.innerHTML = '<p class="text-danger">Terjadi kesalahan saat memuat video. Pastikan server berjalan normal.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
